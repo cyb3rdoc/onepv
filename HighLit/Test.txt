@@ -1,0 +1,49 @@
+fatal	safety	case	male	pregnant	ineffective	paracetamol	paracetamol/ibuprofen	in-vivo	toxic
+fatality	risk	case-report	man	pregnancy	failure	acetaminophen		vivo	intoxic
+lethal	high-risk	case report	boy	reproduction	failed			in-vitro	pharmacotoxic
+death	overdose	case-series	female	reproductive	nonresponse			vitro	cardiotoxic
+dead	misuse	case series	woman	fetus	non-response			in-silico	neurotoxic
+died	abuse	patient	girl	foetus	nonresponsive			silico	nephrotoxic
+mortality	suicide		child	fetal	non-responsive			cell-line	hepatotoxic
+serious	suicidal		year-old	embryo	resistance			cell line	myotoxicity
+severe	grade-3		years-old	congenital	resistant			mice	immunotoxic
+adverse	grade 3			anomaly	contraindication			mouse	cytotoxic
+undesired	grade-4			malformation	contraindicated			murine	genotoxic
+undesirable	grade 4			teratogen	off-label			rat	injur
+unwanted	grade-5			teratogenic	off label			rats	poison
+side effect	grade 5			teratogenecity	unlicensed			dog	overdos
+side-effect	grade 3-4			children	unapproved			dogs	suicid
+drug-induced	grade 3/4			pediatric	unlabeled			cat	abus
+treatment-related	grade 4-5			paediatric	medication error			cats	misus
+iatrogenic	grade 4/5				error			rabbit	interact
+	grade 3-5				erroneous			rabbits	carcinogen
+	interaction				inadvertant			sheep	cancerogen
+	interaction				maladministration			sheeps	mutagen
+	drug-drug interaction							monkey	complicat
+	TRAE							monkeys	reproduct
+	TEAE							chimpanzee	worsen
+								chimpanzees	meta-analysis
+								pig	systematic
+								pigs	systematic review
+								piglet	literature review
+								piglets	scoping review
+								calf	systematic literature review
+								calves	network analysis
+								zebrafish	
+								crayfish	
+								rodent	
+								rodents	
+								turtle	
+								turtles	
+								mouflon	
+								albino	
+								wistar	
+								sprague-dawley	
+								sprague dawley	
+								beagle	
+								beagles	
+								holstein	
+								danio rerio	
+								terrapene ornata	
+								macaque	
+								rhesus macaque	

@@ -1,0 +1,205 @@
+'##########
+'HighLit - Safety Literature Highlight Tool
+'Developed by Dr. Prashant Patel, OnePV Consulting (onepv@yahoo.com)
+'Copyright (c) 2023 Dr. Prashant Patel, OnePV Consulting (onepv@yahoo.com)
+'##########
+'This program is free software: you can redistribute it and/or modify it
+'under the terms of the GNU General Public License as published by
+'the Free Software Foundation, either version 3 of the License, or any later version.
+'This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+'without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+'See the GNU General Public License for more details.
+'You should have received a copy of the GNU General Public License along with this program.
+'If not, see <https://www.gnu.org/licenses/>.
+'##########
+Private Sub HighLit()
+
+Dim fPicker As FileDialog
+Dim sfPath As String
+Dim sfName As String
+Dim bIsTxtFile As Boolean
+
+Application.StatusBar = "Opening file..."
+
+'Get path of text file
+Set fPicker = Application.FileDialog(msoFileDialogFilePicker)
+
+fPicker.Title = "Select a Text (*.txt) or Word (*.docx) File"
+fPicker.InitialFileName = ActiveWorkbook.Path
+fPicker.Filters.Clear
+fPicker.Filters.Add "Custom Text Files", "*.txt, *.docx", 1
+fPicker.Show
+
+If fPicker.SelectedItems.Count = 1 Then
+    sfPath = fPicker.SelectedItems(1)
+    sfName = Right$(fPicker.SelectedItems(1), Len(fPicker.SelectedItems(1)) - InStrRev(fPicker.SelectedItems(1), "\"))
+    If Right(sfName, 3) = "txt" Then
+        sfName = Replace(sfName, ".txt", "")
+        bIsTxtFile = True
+    Else
+        sfName = Replace(sfName, ".docx", "")
+        bIsTxtFile = False
+    End If
+Else
+    MsgBox ("No file selected...Exiting!")
+    Application.StatusBar = "Developed by OnePV Consulting"
+    Exit Sub
+End If
+
+'Set Word application and Open new Word document
+Dim wdApp As Object
+Dim wdDoc As Object
+Dim txtFile As Object
+Dim bWeStartedWord As Boolean
+
+On Error Resume Next
+Set wdApp = GetObject("Word.Application")
+On Error GoTo 0
+If wdApp Is Nothing Then
+    Set wdApp = CreateObject("Word.Application")
+    bWeStartedWord = True
+End If
+
+If bIsTxtFile Then
+    Set txtFile = wdApp.Documents.Open(sfPath)
+    Set wdDoc = wdApp.Documents.Add
+    wdDoc.Range.InsertAfter txtFile.Range.Text & vbCr
+    'Close TXT file
+    txtFile.Close SaveChanges:=False
+Else
+    Set wdDoc = wdApp.Documents.Open(sfPath)
+End If
+
+Application.StatusBar = "Finding important words..."
+
+Dim i As Long
+Dim p As Long
+Dim hColor As Variant
+Dim fColor As Variant
+Dim tWord As Variant
+
+'Highlight selected words - wildcard
+p = 21
+Do While ThisWorkbook.Sheets("HighLit").Cells(p, 11).Value <> ""
+    tWord = ThisWorkbook.Sheets("HighLit").Cells(p, 11).Value
+    wdApp.Options.DefaultHighlightColorIndex = wdYellow
+    With wdDoc.Range.Find
+        .ClearFormatting
+        .Text = tWord
+        .Replacement.ClearFormatting
+        .Replacement.Text = ""
+        .Replacement.Highlight = True
+        .Replacement.Font.ColorIndex = wdBlack
+        .Forward = True
+        .Wrap = wdFindContinue
+        .MatchCase = False
+        .MatchWholeWord = False
+        .MatchWildcards = False
+        .MatchSoundsLike = False
+        .MatchAllWordForms = False
+        .Execute Replace:=wdReplaceAll
+    End With
+    p = p + 1
+Loop
+
+'Highlight selected words - Exact word
+For i = 2 To 10
+    p = 21
+    'Set appropriate highlight color
+    If i = 2 Then
+        hColor = wdRed
+    ElseIf i = 4 Then
+        hColor = wdTurquoise
+    ElseIf i = 6 Then
+        hColor = wdPink
+    ElseIf i = 8 Then
+        hColor = wdBrightGreen
+    ElseIf i = 10 Then
+        hColor = wdBlue
+    Else
+        hColor = wdNoHighlight
+    End If
+    'Set appropriate font color
+    If i = 3 Then
+        fColor = wdRed
+    ElseIf i = 5 Then
+        fColor = wdBlue
+    ElseIf i = 7 Then
+        fColor = wdPink
+    ElseIf i = 9 Then
+        fColor = wdGreen
+    Else
+        fColor = wdBlack
+    End If
+    'Implement highlight or font color in word document
+    Do While ThisWorkbook.Sheets("HighLit").Cells(p, i).Value <> ""
+        If Not i = 8 Then
+            tWord = ThisWorkbook.Sheets("HighLit").Cells(p, i).Value
+            wdApp.Options.DefaultHighlightColorIndex = hColor
+            With wdDoc.Range.Find
+                .ClearFormatting
+                .Text = tWord
+                .Replacement.ClearFormatting
+                .Replacement.Text = ""
+                .Replacement.Highlight = True
+                .Replacement.Font.ColorIndex = fColor
+                .Forward = True
+                .Wrap = wdFindContinue
+                .MatchCase = False
+                .MatchWholeWord = True
+                .MatchWildcards = False
+                .MatchSoundsLike = False
+                .MatchAllWordForms = False
+                .Execute Replace:=wdReplaceAll
+            End With
+            p = p + 1
+        Else
+            p = p + 1
+        End If
+    Loop
+Next i
+
+'Corrected highlight words for column 8 - Exact word
+p = 21
+Do While ThisWorkbook.Sheets("HighLit").Cells(p, 8).Value <> ""
+    tWord = ThisWorkbook.Sheets("HighLit").Cells(p, 8).Value
+    wdApp.Options.DefaultHighlightColorIndex = wdBrightGreen
+    With wdDoc.Range.Find
+        .ClearFormatting
+        .Text = tWord
+        .Replacement.ClearFormatting
+        .Replacement.Text = ""
+        .Replacement.Highlight = True
+        .Replacement.Font.ColorIndex = wdBlack
+        .Forward = True
+        .Wrap = wdFindContinue
+        .MatchCase = False
+        .MatchWholeWord = True
+        .MatchWildcards = False
+        .MatchSoundsLike = False
+        .MatchAllWordForms = False
+        .Execute Replace:=wdReplaceAll
+    End With
+    p = p + 1
+Loop
+
+Application.StatusBar = "Saving file..."
+
+'Save highlighted Word file
+With wdDoc
+    wdApp.DisplayAlerts = wdAlertsNone
+    .SaveAs2 ActiveWorkbook.Path & "\Review_" & sfName & ".docx", FileFormat:=12
+    .Close
+    wdApp.DisplayAlerts = wdAlertsAll
+End With
+
+If bWeStartedWord Then wdApp.Quit
+If bIsTxtFile Then Set txtFile = Nothing
+Set wdDoc = Nothing
+Set wdApp = Nothing
+
+MsgBox ("Word file saved successfully!" & vbNewLine & vbNewLine & ActiveWorkbook.Path & "\Review_" & sfName & ".docx")
+
+Application.StatusBar = "Developed by OnePV Consulting"
+
+End Sub
